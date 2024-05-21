@@ -7,17 +7,17 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private static Long id;
+    @Column(name = "id")
+    private Long id;
 
-    @Column
-    private static String name;
+    @Column(name = "name")
+    private String name;
 
-    @Column
-    private static String lastName;
+    @Column(name = "lastName")
+    private String lastName;
 
-    @Column
-    private static Byte age;
+    @Column(name = "age")
+    private Byte age;
 
     public User() {
 
@@ -29,19 +29,19 @@ public class User {
         this.age = age;
     }
 
-    public static Long getId() { return id; }
+    public  Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
 
-    public static String getName() { return name; }
+    public  String getName() { return name; }
 
     public void setName(String name) { this.name = name; }
 
-    public static String getLastName() { return lastName; }
+    public String getLastName() { return lastName; }
 
     public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public static Byte getAge() { return age; }
+    public Byte getAge() { return age; }
 
     public void setAge(Byte age) { this.age = age; }
 

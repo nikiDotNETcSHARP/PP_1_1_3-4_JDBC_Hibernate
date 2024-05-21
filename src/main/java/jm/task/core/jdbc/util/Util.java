@@ -8,8 +8,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
+import org.hibernate.service.ServiceRegistry;
 
 public class Util {
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -36,23 +38,25 @@ public class Util {
         if (sessionFactory == null) {
             try {
                 Properties settings = new Properties();
-                settings.put(Environment.DRIVER, DB_DRIVER);
                 settings.put(Environment.URL, DB_URL);
                 settings.put(Environment.USER, userName);
                 settings.put(Environment.PASS, password);
+                settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
                 settings.put(Environment.SHOW_SQL, "true");
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
                 settings.put(Environment.HBM2DDL_AUTO, "create");
 
-                sessionFactory = new Configuration()
-                        .addProperties(settings)
-                        .addAnnotatedClass(User.class)
-                        .buildSessionFactory();
+                Configuration configuration = new Configuration();
+                configuration.setProperties(settings);
+                configuration.addAnnotatedClass(User.class);
+                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties()).build();
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-                System.out.println("Connection SUCCESS");
+                System.out.println("Соединение установлено!");
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Connection ERROR");
+                System.out.println("Ошибка. Соединение не установлено.");
             }
         }
         return sessionFactory;
